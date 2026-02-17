@@ -4,10 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, TrendingUp, Palette, Home, Brain } from "lucide-react";
+import { Sparkles, TrendingUp, Palette, Home, Brain, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
-
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
@@ -19,12 +17,28 @@ const navItems = [
 export function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  // Prevent scrolling when mobile menu is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
 
   return (
     <motion.nav
@@ -47,8 +61,8 @@ export function Navbar() {
               whileTap={{ scale: 0.9 }}
               transition={{ type: "spring", stiffness: 400 }}
             >
-                <Sparkles className="w-5 h-5 text-white" />
-              </motion.div>
+              <Sparkles className="w-5 h-5 text-white" />
+            </motion.div>
             <motion.span
               className="text-xl font-bold text-[#5C3D2E]"
               whileHover={{ scale: 1.05 }}
@@ -57,7 +71,8 @@ export function Navbar() {
             </motion.span>
           </Link>
 
-          <div className="flex items-center gap-1">
+          {/* Desktop nav */}
+          <div className="hidden md:flex items-center gap-1">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
@@ -81,14 +96,102 @@ export function Navbar() {
                       />
                     )}
                     <item.icon className="w-4 h-4 relative z-10" />
-                    <span className="hidden sm:inline relative z-10">{item.label}</span>
+                    <span className="relative z-10">{item.label}</span>
                   </motion.div>
                 </Link>
               );
             })}
           </div>
+
+          {/* Mobile hamburger button */}
+          <motion.button
+            className="md:hidden p-2 rounded-xl text-[#5C3D2E] hover:bg-[#5C3D2E]/10 transition-colors"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            whileTap={{ scale: 0.9 }}
+            aria-label="Toggle menu"
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {mobileOpen ? (
+                <motion.div
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <X className="w-6 h-6" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="menu"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Menu className="w-6 h-6" />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.button>
         </div>
       </div>
+
+      {/* Mobile menu drawer */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              className="fixed inset-0 top-16 bg-black/20 backdrop-blur-sm z-40 md:hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileOpen(false)}
+            />
+
+            {/* Menu panel */}
+            <motion.div
+              className="absolute top-16 left-0 right-0 bg-[#FDFBF7]/98 backdrop-blur-xl border-b border-[#E5DDD3] shadow-xl z-50 md:hidden"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            >
+              <div className="px-4 py-4 space-y-1">
+                {navItems.map((item, i) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <motion.div
+                      key={item.href}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                    >
+                      <Link
+                        href={item.href}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        <div
+                          className={cn(
+                            "flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition-all",
+                            isActive
+                              ? "bg-[#5C3D2E]/10 text-[#5C3D2E]"
+                              : "text-[#6B6B6B] hover:bg-[#F5F0EB] hover:text-[#1A1A1A]"
+                          )}
+                        >
+                          <item.icon className="w-5 h-5" />
+                          <span>{item.label}</span>
+                        </div>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 }

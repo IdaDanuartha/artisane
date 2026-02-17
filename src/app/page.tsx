@@ -102,7 +102,7 @@ export default function HomePage() {
           </motion.div>
 
           <motion.h1
-            className="text-5xl sm:text-7xl font-bold mb-6 leading-tight"
+            className="text-3xl sm:text-5xl lg:text-7xl font-bold mb-6 leading-tight"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
@@ -115,7 +115,7 @@ export default function HomePage() {
           </motion.h1>
 
           <motion.p
-            className="text-xl text-[#6B6B6B] max-w-2xl mx-auto mb-10"
+            className="text-base sm:text-xl text-[#6B6B6B] max-w-2xl mx-auto mb-10 px-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
@@ -179,7 +179,7 @@ export default function HomePage() {
 
         {/* Stats */}
         <motion.div
-          className="grid grid-cols-3 gap-4 mt-20 max-w-3xl mx-auto"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-20 max-w-3xl mx-auto"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
@@ -192,7 +192,7 @@ export default function HomePage() {
               transition={{ type: "spring", stiffness: 300 }}
             >
               <stat.icon className="w-8 h-8 text-[#5C3D2E] mx-auto mb-3" />
-              <p className="text-2xl font-bold text-[#1A1A1A] mb-1">{stat.value}</p>
+              <p className="text-lg sm:text-2xl font-bold text-[#1A1A1A] mb-1">{stat.value}</p>
               <p className="text-sm text-[#9B9B9B]">{stat.label}</p>
             </motion.div>
           ))}
@@ -258,7 +258,7 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
         <motion.div
-          className="p-12 rounded-3xl bg-[#5C3D2E] shadow-2xl shadow-[#5C3D2E]/15"
+          className="p-6 sm:p-12 rounded-3xl bg-[#5C3D2E] shadow-2xl shadow-[#5C3D2E]/15"
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
@@ -271,10 +271,10 @@ export default function HomePage() {
           >
             <Rocket className="w-16 h-16 text-white/80 mx-auto mb-6" />
           </motion.div>
-          <h2 className="text-4xl font-bold mb-4 text-white">
+          <h2 className="text-2xl sm:text-4xl font-bold mb-4 text-white">
             Siap Tingkatkan Bisnis Anda?
           </h2>
-          <p className="text-white/70 mb-8 text-lg">
+          <p className="text-white/70 mb-8 text-sm sm:text-lg">
             Upload foto produk dan biarkan AI membantu menganalisis potensi bisnis Anda.
           </p>
           <Link href="/pricing">

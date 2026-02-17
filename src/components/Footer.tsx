@@ -125,7 +125,7 @@ export function Footer() {
               © {currentYear} Artisane. All rights reserved.
             </p>
             <motion.p
-              className="flex items-center gap-1.5 text-[#9B9B9B] text-sm"
+              className="flex items-center gap-1.5 text-[#9B9B9B] text-sm flex-wrap justify-center"
               whileHover={{ scale: 1.05 }}
             >
               Made with

@@ -85,8 +85,11 @@ function NeuralBackground() {
 }
 
 function PipelineSection() {
+  const stepColors = ["text-[#5C3D2E]", "text-[#A67B5B]", "text-[#8C7B6B]"];
+  const stepBgColors = ["bg-[#5C3D2E]", "bg-[#A67B5B]", "bg-[#8C7B6B]"];
+
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+    <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
       <motion.div className="text-center mb-12 sm:mb-16" variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
           <span className="text-[#5C3D2E]">3 Langkah Sederhana</span>
@@ -94,41 +97,61 @@ function PipelineSection() {
         <p className="text-[#6B6B6B] max-w-xl mx-auto text-base sm:text-lg">Dari foto produk hingga insight bisnis — semuanya otomatis</p>
       </motion.div>
 
-      <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 relative" variants={stagger} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-        {/* Connector lines - desktop only */}
-        <div className="hidden md:block absolute top-1/2 left-[33%] w-[34%] h-[2px] -translate-y-1/2 z-0">
-          <motion.div className="h-full bg-[#C9B69C] rounded-full"
-            initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }} transition={{ delay: 0.6, duration: 0.8 }} style={{ transformOrigin: "left" }} />
-        </div>
-        <div className="hidden md:block absolute top-1/2 left-[66%] w-[34%] h-[2px] -translate-y-1/2 z-0">
-          <motion.div className="h-full bg-[#C9B69C] rounded-full"
-            initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }} transition={{ delay: 0.9, duration: 0.8 }} style={{ transformOrigin: "left" }} />
+      {/* Vertical Timeline */}
+      <motion.div className="relative" variants={stagger} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+        {/* Vertical connecting line */}
+        <div className="absolute left-6 sm:left-8 top-0 bottom-0 w-[2px] z-0">
+          <motion.div
+            className="w-full h-full bg-gradient-to-b from-[#5C3D2E]/30 via-[#A67B5B]/30 to-[#8C7B6B]/30 rounded-full"
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+            style={{ transformOrigin: "top" }}
+          />
         </div>
 
         {pipelineSteps.map((step, i) => (
-          <motion.div key={i} variants={fadeUp} className="relative z-10">
-            <motion.div
-              className="p-6 sm:p-8 rounded-3xl bg-white border border-[#E5DDD3] text-center hover:border-[#C9B69C] transition-all duration-500 shadow-sm"
-              whileHover={{ scale: 1.03, y: -8 }} transition={{ type: "spring", stiffness: 300 }}
-            >
-              <motion.div className="inline-flex p-4 rounded-2xl bg-[#5C3D2E]/10 border border-[#5C3D2E]/15 mb-4"
-                animate={{ y: [0, -6, 0] }} transition={{ duration: 3, repeat: Infinity, delay: i * 0.4 }}>
-                <step.icon className={`w-8 h-8 ${i === 0 ? "text-[#5C3D2E]" : i === 1 ? "text-[#A67B5B]" : "text-[#8C7B6B]"}`} />
+          <motion.div
+            key={i}
+            variants={fadeUp}
+            className={`relative flex items-start gap-5 sm:gap-8 ${i < pipelineSteps.length - 1 ? "pb-8 sm:pb-12" : ""}`}
+          >
+            {/* Timeline node */}
+            <div className="relative z-10 flex-shrink-0">
+              <motion.div
+                className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full ${stepBgColors[i]} flex items-center justify-center shadow-lg`}
+                initial={{ scale: 0 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 + i * 0.2, type: "spring", stiffness: 300 }}
+                whileHover={{ scale: 1.15 }}
+              >
+                <step.icon className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
               </motion.div>
-              <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#5C3D2E]/10 text-[#5C3D2E] text-sm font-bold mb-3">
-                {i + 1}
+
+              {/* Pulse ring */}
+              <motion.div
+                className={`absolute inset-0 rounded-full border-2 ${i === 0 ? "border-[#5C3D2E]/30" : i === 1 ? "border-[#A67B5B]/30" : "border-[#8C7B6B]/30"}`}
+                animate={{ scale: [1, 1.5, 1], opacity: [0.4, 0, 0.4] }}
+                transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.3 }}
+              />
+            </div>
+
+            {/* Content card */}
+            <motion.div
+              className="flex-1 p-5 sm:p-7 rounded-2xl bg-white border border-[#E5DDD3] shadow-sm hover:border-[#C9B69C] hover:shadow-md transition-all duration-300"
+              whileHover={{ x: 6 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full ${stepBgColors[i]}/10 ${stepColors[i]} text-sm font-bold`}>
+                  {i + 1}
+                </span>
+                <h3 className="text-lg sm:text-xl font-bold text-[#1A1A1A]">{step.title}</h3>
               </div>
-              <h3 className="text-xl font-bold mb-2 text-[#1A1A1A]">{step.title}</h3>
-              <p className="text-[#6B6B6B] text-sm sm:text-base">{step.desc}</p>
+              <p className="text-[#6B6B6B] text-sm sm:text-base leading-relaxed">{step.desc}</p>
             </motion.div>
-            {/* Mobile connector */}
-            {i < 2 && (
-              <div className="flex justify-center my-4 md:hidden">
-                <motion.div animate={{ y: [0, 5, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
-                  <ChevronRight className="w-6 h-6 text-[#C9B69C] rotate-90" />
-                </motion.div>
-              </div>
-            )}
           </motion.div>
         ))}
       </motion.div>
@@ -328,10 +351,10 @@ function DemoSection() {
                       <DollarSign className="w-5 h-5 text-[#5C3D2E]" />
                       <h4 className="font-semibold text-[#5C3D2E]">Rekomendasi Harga</h4>
                     </div>
-                    <p className="text-3xl sm:text-4xl font-bold text-[#5C3D2E] text-center my-3">
+                    <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#5C3D2E] text-center my-3">
                       {formatRupiah(mockPricing.estimatedPrice.recommended)}
                     </p>
-                    <p className="text-center text-[#6B6B6B] text-sm">
+                    <p className="text-center text-[#6B6B6B] text-xs sm:text-sm">
                       Range: {formatRupiah(mockPricing.estimatedPrice.min)} - {formatRupiah(mockPricing.estimatedPrice.max)}
                     </p>
                   </Card>
@@ -426,7 +449,7 @@ function DemoSection() {
                     <Palette className="w-4 h-4 text-[#8C7B6B]" />
                     <h4 className="font-medium text-sm text-[#1A1A1A]">Color Palette</h4>
                   </div>
-                  <div className="grid grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     {Object.entries(mockBranding.colorPalette).map(([name, color], i) => (
                       <motion.div key={name} className="text-center" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 + i * 0.1 }}
                         whileHover={{ scale: 1.1 }}>
@@ -497,7 +520,7 @@ export default function HowItWorksPage() {
             <span className="text-sm text-[#5C3D2E]">Behind the AI Magic</span>
           </motion.div>
 
-          <motion.h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 leading-tight"
+          <motion.h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold mb-6 leading-tight"
             initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
             <span className="text-[#5C3D2E]">
               Bagaimana AI Kami
@@ -609,14 +632,14 @@ export default function HowItWorksPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/pricing">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button size="lg" className="bg-white text-[#5C3D2E] hover:bg-[#F5F0EB] px-8 py-6 text-lg rounded-xl shadow-lg w-full sm:w-auto font-semibold">
+                <Button size="lg" className="bg-white text-[#5C3D2E] hover:bg-[#F5F0EB] px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg rounded-xl shadow-lg w-full sm:w-auto font-semibold">
                   Smart Pricing <TrendingUp className="ml-2 w-5 h-5" />
                 </Button>
               </motion.div>
             </Link>
             <Link href="/branding">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button size="lg" variant="outline" className="border-white/30 text-[#5C3D2E] hover:bg-[#F5F0EB] px-8 py-6 text-lg rounded-xl w-full sm:w-auto font-semibold">
+                <Button size="lg" variant="outline" className="border-white/30 text-[#5C3D2E] hover:bg-[#F5F0EB] px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg rounded-xl w-full sm:w-auto font-semibold">
                   Brand Identity <Palette className="ml-2 w-5 h-5" />
                 </Button>
               </motion.div>

@@ -229,14 +229,14 @@ export default function PricingPage() {
                       </div>
                       <div className="text-center py-4">
                         <motion.p
-                          className="text-4xl sm:text-5xl font-bold text-[#5C3D2E] mb-2"
+                          className="text-2xl sm:text-4xl lg:text-5xl font-bold text-[#5C3D2E] mb-2"
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
                           transition={{ type: "spring", delay: 0.3 }}
                         >
                           {formatRupiah(result.estimatedPrice.recommended)}
                         </motion.p>
-                        <p className="text-[#6B6B6B]">
+                        <p className="text-xs sm:text-sm text-[#6B6B6B]">
                           Range: {formatRupiah(result.estimatedPrice.min)} - {formatRupiah(result.estimatedPrice.max)}
                         </p>
                       </div>
